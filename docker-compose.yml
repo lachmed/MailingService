@@ -1,0 +1,64 @@
+version: "3.9"
+services:
+
+  
+
+  # mysql:
+  #   image: mysql
+  #   ports:
+  #     - "3306:3306"
+  #   networks:
+  #     - lachnet
+  #   deploy:
+  #     replicas: 1
+  #     update_config:
+  #       parallelism: 1
+  #       delay: 10s
+  #     restart_policy:
+  #       condition: on-failure
+
+  eureka:
+    image: awab228/eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - lachnet
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  # wait:
+  #   image: wardsco/sleep:latest
+  #   depends_on:
+  #     - "eureka"
+  #   command: ["./wait-for"]
+
+ 
+
+  mailingService:
+    image: mailingservice:latest5
+    ports:
+      - "8001:8001"
+    networks:
+      - lachnet
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - "eureka"
+
+  
+
+networks:
+  lachnet:
+
+volumes:
+  db-data:
